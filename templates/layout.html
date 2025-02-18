@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stylish Social Media</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'ubuntu', sans-serif;
+            background: #e1e8f0;
+            padding-top: 50px;
+        }
+
+        .navbar {
+            background: linear-gradient(90deg, #004D98, #A50044);
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 8px 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.6rem;
+            color: white;
+        }
+
+        .navbar-brand:hover {
+            font-size: 1.6rem;
+            color: rgb(255, 0, 136);
+        }
+
+        .navbar-nav .nav-link {
+            color: white;
+            margin-left: 15px;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #ffc107;
+        }
+
+        .navbar .form-inline {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .form-control {
+            width: 250px;
+        }
+
+        .profile-card {
+            background: linear-gradient(90deg, #004D98, #A50044);
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .profile-card img {
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border: 3px solid #00c6ff;
+        }
+
+        .profile-card h3 {
+            margin-top: 15px;
+            color: #ffffff;
+        }
+
+        .profile-card p {
+            color: #dadada;
+        }
+
+        .btn-follow {
+            background: linear-gradient(90deg, #004D98, #A50044);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-follow:hover {
+            background: #007bff;
+        }
+
+        .post-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .post-card h5 {
+            color: #333;
+        }
+
+        .post-card p {
+            color: #555;
+        }
+
+        .post-card img {
+            border-radius: 10px;
+            margin-top: 20px;
+            max-height: 350px;
+            object-fit: cover;
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .post-actions button {
+            background: transparent;
+            background: #ffffff;
+
+            color: #333;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .post-actions button:hover {
+            background: #fff8f8;
+        }
+
+        .post-actions i {
+            margin-right: 5px;
+            font-size: 18px;
+            /* Smaller icon size */
+            vertical-align: middle;
+            /* Keep icon inline with text */
+        }
+
+        .post-actions span {
+            vertical-align: middle;
+            /* Ensure text is aligned with icon */
+        }
+
+        .comment-box {
+            display: none;
+            margin-top: 20px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .comment-box textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            resize: vertical;
+        }
+
+        .comment-box .btn-post-comment {
+            background: #00c6ff;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            margin-top: 10px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .comment-box .btn-post-comment:hover {
+            background: #007bff;
+        }
+
+        .post-form {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .post-form input,
+        .post-form textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+        }
+
+        .post-form button {
+            background: linear-gradient(90deg, #004D98, #A50044);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .post-form button:hover {
+            background: #007bff;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 767px) {
+            .post-actions {
+                flex-direction: row;
+                /* Keep buttons in a row on mobile */
+                justify-content: space-between;
+            }
+
+            .post-actions button {
+                width: auto;
+                margin-bottom: 10px;
+                padding: 12px;
+            }
+
+            .post-actions i {
+                font-size: 16px;
+                /* Smaller icon size for mobile */
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">LEOFEED</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Explore</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Messages</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Logout</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">USER</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Accounts</a>
+                    </li>
+
+                </ul>
+                <form class="d-flex ms-auto">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Container -->
+    <div class="container my-5">
+        <!-- Profile Section -->
+        <div class="row">
+
+            {% block content %}
+            
+            {% endblock content %}
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer class="footer mt-5 py-3 text-center">
+        <div class="container">
+            <p class="mb-0">© 2025 LEOFEED. All rights reserved.</p>
+            <p class="mb-0">
+                <a href="#">Privacy Policy</a> |
+                <a href="#">Terms of Service</a> |
+                <a href="#">Contact Us</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        function toggleCommentBox(button) {
+            const commentBox = button.parentElement.nextElementSibling;
+            commentBox.style.display = commentBox.style.display === 'none' || commentBox.style.display === '' ? 'block' : 'none';
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
