@@ -1,9 +1,10 @@
 {% extends 'layout.html' %}
+{% load static %}
 
 {% block content %}
 <div class="col-md-3">
     <div class="profile-card">
-        <img src="https://via.placeholder.com/120" alt="Profile Picture">
+        <img src="{% static 'img/profile_demo_image.jpeg' %}" alt="Profile Picture">
         <h3>John Doe</h3>
         <p>Web Developer | Tech Enthusiast</p>
         <button class="btn-follow">Follow</button>
@@ -15,45 +16,62 @@
     <!-- Post Form -->
     <div class="post-form">
         <h3>Create Your Post</h3>
-        <form id="postForm">
+        <form id="postForm" action="{% url 'home' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+    
+            <!-- ফর্মের ভ্যালিডেশন ইরর দেখানোর জন্য -->
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <ul>
+                        {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                                <li>{{ field|title }}: {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+    
             <div class="mb-3">
-                <textarea class="form-control" id="postText" placeholder="What's on your mind?.." rows="5"></textarea>
+                <textarea class="form-control" name="post_content" id="postText" placeholder="What's on your mind?.." rows="5"></textarea>
             </div>
             <div class="mb-3">
-                <input type="file" class="form-control" id="postImage" accept="image/*">
+                <input type="file" class="form-control" name="post_image" id="postImage" accept="image/*">
             </div>
             <button type="submit" class="btn btn-primary">Post</button>
         </form>
     </div>
-
+    
     <!-- Post Cards will appear here -->
+    {% for post in posts %}
     <div class="post-card">
-        <h5>John Doe</h5>
-        <p>Had an amazing day coding a new project! #WebDev #Excited</p>
-        <img src="https://via.placeholder.com/500x300" class="img-fluid" alt="Post Image">
-        <div class="post-actions">
-            <button><i class="fas fa-thumbs-up"></i> Like</button>
-            <button onclick="toggleCommentBox(this)"><i class="fas fa-comment"></i> Comment</button>
-            <button><i class="fas fa-share"></i> Share</button>
+        
+        <div class="post-header">
+            <!-- Profile Image with Demo Image -->
+            <img src="{% static 'img/profile_demo_image.jpeg' %}" class="profile-image" alt="Profile Image">
+            
+            <!-- User Name and Time in the same column -->
+            <div class="user-time">
+                <h5 class="post-user">{{ post.user.first_name }}&nbsp;{{ post.user.last_name }}</h5>
+                <i class="fa-solid fa-clock"></i>&nbsp;{{ post.created_at|date:"F j, Y, g:i A" }}
+            </div>
         </div>
-        <!-- Comment Box -->
-        <div class="comment-box">
-            <form>
-                <textarea placeholder="Write a comment..." rows="4"></textarea>
-                <button type="submit" class="btn-post-comment">Post Comment</button>
-            </form>
+        <div class="m-2" >
+            <p>{{ post.post_content }}</p>
         </div>
-    </div>
 
-    <div class="post-card">
-        <h5>Jane Smith</h5>
-        <p>Learning new technologies to stay ahead! #TechLife #Innovate</p>
-        <img src="https://via.placeholder.com/500x300" class="img-fluid" alt="Post Image">
+        {% if post.post_image %}
+            <div>
+                <img src="{{ post.post_image.url }}" class="img-fluid post-img" alt="Post Image">
+            </div>
+        {% endif %}
+
         <div class="post-actions">
             <button><i class="fas fa-thumbs-up"></i> Like</button>
             <button onclick="toggleCommentBox(this)"><i class="fas fa-comment"></i> Comment</button>
             <button><i class="fas fa-share"></i> Share</button>
         </div>
+
         <!-- Comment Box -->
         <div class="comment-box">
             <form>
@@ -62,6 +80,8 @@
             </form>
         </div>
     </div>
+{% endfor %}
+
 </div>
 
 <div class="col-md-3">

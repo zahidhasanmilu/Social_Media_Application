@@ -112,11 +112,18 @@
 
         .post-card img {
             border-radius: 10px;
-            margin-top: 20px;
-            max-height: 350px;
+            margin-top: 0;
+            max-height: 500px;
             object-fit: cover;
         }
-
+        .post-img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            display: block;
+            margin: 0 auto;  /* Center the image horizontally */
+            max-height: 350px;  /* Limit the height of the image */
+        }
         .post-actions {
             display: flex;
             justify-content: space-between;
@@ -152,6 +159,38 @@
             vertical-align: middle;
             /* Ensure text is aligned with icon */
         }
+        .post-user {
+            background: linear-gradient(60deg, #004D98, #A50044);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Profile image styling */
+/* Post header styling: Flexbox for inline alignment */
+.post-header {
+    display: flex;           /* Align items in a row */
+    align-items: center;     /* Vertically align content */
+}
+
+/* Profile image styling */
+.profile-image {
+    width: 50px;            /* Image size */
+    height: 50px;           /* Image size */
+    border-radius: 50%;     /* Make it circular */
+    margin-right: 10px;     /* Space between image and text */
+    object-fit: cover;      /* Ensure image covers the area */
+}
+
+/* User Name and Time container styling */
+.user-time {
+    display: d-flex;          /* Align name and time in one line */
+    align-items: center;    /* Vertically align name and time */
+}
+
+.user-time h5 {
+    margin-right: 10px;     /* Space between name and time */
+}
+
 
         .comment-box {
             display: none;
