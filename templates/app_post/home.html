@@ -52,8 +52,9 @@
             
             <!-- User Name and Time in the same column -->
             <div class="user-time">
-                <h5 class="post-user">{{ post.user.first_name }}&nbsp;{{ post.user.last_name }}</h5>
-                <i class="fa-solid fa-clock"></i>&nbsp;{{ post.created_at|date:"F j, Y, g:i A" }}
+                <h6 class="post-user"><b>{{ post.user.first_name }}&nbsp;{{ post.user.last_name }}</b></h6>
+                <i class="fa-solid fa-clock"></i>&nbsp;{{ post.created_at|date:"bj,Y,g:i A" }}
+
             </div>
         </div>
         <div class="m-2" >

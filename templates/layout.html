@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stylish Social Media</title>
+    <title>Leofeed</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -108,8 +108,10 @@
 
         .post-card p {
             color: #555;
+            text-align: justify;
+            white-space: pre-line;
         }
-
+        
         .post-card img {
             border-radius: 10px;
             margin-top: 0;
@@ -169,13 +171,14 @@
 /* Post header styling: Flexbox for inline alignment */
 .post-header {
     display: flex;           /* Align items in a row */
-    align-items: center;     /* Vertically align content */
+    align-items: center;   
+    font-size: 12px;  /* Vertically align content */
 }
 
 /* Profile image styling */
 .profile-image {
-    width: 50px;            /* Image size */
-    height: 50px;           /* Image size */
+    width: 40px;            /* Image size */
+    height: 40px;           /* Image size */
     border-radius: 50%;     /* Make it circular */
     margin-right: 10px;     /* Space between image and text */
     object-fit: cover;      /* Ensure image covers the area */
@@ -187,7 +190,7 @@
     align-items: center;    /* Vertically align name and time */
 }
 
-.user-time h5 {
+.user-time h6 {
     margin-right: 10px;     /* Space between name and time */
 }
 
