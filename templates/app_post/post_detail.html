@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center my-5" style="min-height: 80vh;">
+    <div class="row justify-content-center align-items-center">
+
+        <!-- Post Image -->
+        <div class="col-md-6 post-details-card">
+            {% if post.post_image %}
+            <img src="{{ post.post_image.url }}" style="width:100%;">
+            {% endif %}
+        </div>
+
+        <div class="col-md-4 post-details-card">
+            <div class="post-header">
+                <!-- Profile Image with Demo Image -->
+                <img src="{% static 'img/profile_demo_image.jpeg' %}" class="profile-image" alt="Profile Image">
+
+                <!-- User Name and Time in the same column -->
+                <div class="user-time">
+                    <h6 class="post-user"><b>{{ post.user.first_name }}&nbsp;{{ post.user.last_name }}</b></h6>
+                    <i class="fa-solid fa-clock"></i>&nbsp;{{ post.created_at|date:"bj,Y,g:i A" }}
+                </div>
+            </div>
+
+            <!-- post content  -->
+            {% if post.post_content %}
+            <div class="post-card m-2">
+                <p>{{ post.post_content }}</p>
+            </div>
+            {% endif %}
+
+            <!-- post actions  -->
+            <div class="post-actions">
+                <button><i class="fas fa-thumbs-up"></i> Like</button>
+                <button onclick="toggleCommentBox(this)"><i class="fas fa-comment"></i> Comment</button>
+                <button><i class="fas fa-share"></i> Share</button>
+            </div>
+
+            <!-- Comment Box -->
+            <div class="comment-box">
+                <form>
+                    <textarea placeholder="Write a comment..." rows="4"></textarea>
+                    <button type="submit" class="btn-post-comment">Post Comment</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock content %}

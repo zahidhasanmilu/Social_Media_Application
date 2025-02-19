@@ -1,0 +1,290 @@
+body {
+    font-family: 'ubuntu', sans-serif;
+    background: #e1e8f0;
+    padding-top: 50px;
+}
+
+.navbar {
+    background: linear-gradient(90deg, #004D98, #A50044);
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 8px 0;
+}
+
+.navbar-brand {
+    font-size: 1.6rem;
+    color: white;
+}
+
+.navbar-brand:hover {
+    font-size: 1.6rem;
+    color: rgb(255, 0, 136);
+}
+
+.navbar-nav .nav-link {
+    color: white;
+    margin-left: 15px;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #ffc107;
+}
+
+.navbar .form-inline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.form-control {
+    width: 250px;
+}
+
+.profile-card {
+    background: linear-gradient(90deg, #004D98, #A50044);
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.profile-card img {
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border: 3px solid #00c6ff;
+}
+
+.profile-card h3 {
+    margin-top: 15px;
+    color: #ffffff;
+}
+
+.profile-card p {
+    color: #dadada;
+}
+
+.btn-follow {
+    background: linear-gradient(90deg, #004D98, #A50044);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.btn-follow:hover {
+    background: #007bff;
+}
+
+.post-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.post-details-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 30px;
+    margin: 10px;
+}
+
+.post-card h5 {
+    color: #333;
+}
+
+.post-card p {
+    color: #555;
+    text-align: justify;
+    white-space: pre-line;
+}
+
+.post-card img {
+    border-radius: 10px;
+    margin-top: 0;
+    max-height: 500px;
+    object-fit: cover;
+}
+
+.post-img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+    /* Center the image horizontally */
+    max-height: 350px;
+    /* Limit the height of the image */
+}
+
+.post-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.post-actions button {
+    background: transparent;
+    background: #ffffff;
+
+    color: #333;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+.post-actions button:hover {
+    background: #fff8f8;
+}
+
+.post-actions i {
+    margin-right: 5px;
+    font-size: 18px;
+    /* Smaller icon size */
+    vertical-align: middle;
+    /* Keep icon inline with text */
+}
+
+.post-actions span {
+    vertical-align: middle;
+    /* Ensure text is aligned with icon */
+}
+
+.post-user {
+    background: linear-gradient(60deg, #004D98, #A50044);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Profile image styling */
+/* Post header styling: Flexbox for inline alignment */
+.post-header {
+    display: flex;
+    /* Align items in a row */
+    align-items: center;
+    font-size: 12px;
+    /* Vertically align content */
+}
+
+/* Profile image styling */
+.profile-image {
+    width: 40px;
+    /* Image size */
+    height: 40px;
+    /* Image size */
+    border-radius: 50%;
+    /* Make it circular */
+    margin-right: 10px;
+    /* Space between image and text */
+    object-fit: cover;
+    /* Ensure image covers the area */
+}
+
+/* User Name and Time container styling */
+.user-time {
+    display: d-flex;
+    /* Align name and time in one line */
+    align-items: center;
+    /* Vertically align name and time */
+}
+
+.user-time h6 {
+    margin-right: 10px;
+    /* Space between name and time */
+}
+
+
+.comment-box {
+    display: none;
+    margin-top: 20px;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.comment-box textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    resize: vertical;
+}
+
+.comment-box .btn-post-comment {
+    background: #00c6ff;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    margin-top: 10px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.comment-box .btn-post-comment:hover {
+    background: #007bff;
+}
+
+.post-form {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.post-form input,
+.post-form textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+}
+
+.post-form button {
+    background: linear-gradient(90deg, #004D98, #A50044);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.post-form button:hover {
+    background: #007bff;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 767px) {
+    .post-actions {
+        flex-direction: row;
+        /* Keep buttons in a row on mobile */
+        justify-content: space-between;
+    }
+
+    .post-actions button {
+        width: auto;
+        margin-bottom: 10px;
+        padding: 12px;
+    }
+
+    .post-actions i {
+        font-size: 16px;
+        /* Smaller icon size for mobile */
+    }
+}

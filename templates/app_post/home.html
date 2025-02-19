@@ -2,114 +2,129 @@
 {% load static %}
 
 {% block content %}
-<div class="col-md-3">
-    <div class="profile-card">
-        <img src="{% static 'img/profile_demo_image.jpeg' %}" alt="Profile Picture">
-        <h3>John Doe</h3>
-        <p>Web Developer | Tech Enthusiast</p>
-        <button class="btn-follow">Follow</button>
-    </div>
-</div>
+<div class="container my-5">
+    <!-- Profile Section -->
+    <div class="row">
 
-<!-- Post Feed -->
-<div class="col-md-6">
-    <!-- Post Form -->
-    <div class="post-form">
-        <h3>Create Your Post</h3>
-        <form id="postForm" action="{% url 'home' %}" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-    
-            <!-- ফর্মের ভ্যালিডেশন ইরর দেখানোর জন্য -->
-            {% if form.errors %}
-                <div class="alert alert-danger">
-                    <ul>
-                        {% for field, errors in form.errors.items %}
+        <div class="col-md-3">
+            <div class="profile-card">
+                <img src="{% static 'img/profile_demo_image.jpeg' %}" alt="Profile Picture">
+                <h3>John Doe</h3>
+                <p>Web Developer | Tech Enthusiast</p>
+                <button class="btn-follow">Follow</button>
+            </div>
+        </div>
+
+        <!-- Post Feed -->
+        <div class="col-md-6">
+            <!-- Post Form -->
+            <div class="post-form">
+                <h3>Create Your Post</h3>
+                <form id="postForm" action="{% url 'home' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <!-- ফর্মের ভ্যালিডেশন ইরর দেখানোর জন্য -->
+                    {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <ul>
+                            {% for field, errors in form.errors.items %}
                             {% for error in errors %}
-                                <li>{{ field|title }}: {{ error }}</li>
+                            <li>{{ field|title }}: {{ error }}</li>
                             {% endfor %}
-                        {% endfor %}
-                    </ul>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <textarea class="form-control" name="post_content" id="postText"
+                            placeholder="What's on your mind?.." rows="5"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <input type="file" class="form-control" name="post_image" id="postImage" accept="image/*">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Post</button>
+                </form>
+            </div>
+
+            <!-- Post Cards will appear here -->
+            {% for post in posts %}
+            <div class="post-card">
+
+                <div class="post-header">
+                    <!-- Profile Image with Demo Image -->
+                    <img src="{% static 'img/profile_demo_image.jpeg' %}" class="profile-image" alt="Profile Image">
+
+                    <!-- User Name and Time in the same column -->
+                    <div class="user-time">
+                        <h6 class="post-user"><b>{{ post.user.first_name }}&nbsp;{{ post.user.last_name }}</b></h6>
+                        <i class="fa-solid fa-clock"></i>&nbsp;{{ post.created_at|date:"bj,Y,g:i A" }}
+
+                    </div>
                 </div>
-            {% endif %}
-    
-            <div class="mb-3">
-                <textarea class="form-control" name="post_content" id="postText" placeholder="What's on your mind?.." rows="5"></textarea>
-            </div>
-            <div class="mb-3">
-                <input type="file" class="form-control" name="post_image" id="postImage" accept="image/*">
-            </div>
-            <button type="submit" class="btn btn-primary">Post</button>
-        </form>
-    </div>
-    
-    <!-- Post Cards will appear here -->
-    {% for post in posts %}
-    <div class="post-card">
-        
-        <div class="post-header">
-            <!-- Profile Image with Demo Image -->
-            <img src="{% static 'img/profile_demo_image.jpeg' %}" class="profile-image" alt="Profile Image">
-            
-            <!-- User Name and Time in the same column -->
-            <div class="user-time">
-                <h6 class="post-user"><b>{{ post.user.first_name }}&nbsp;{{ post.user.last_name }}</b></h6>
-                <i class="fa-solid fa-clock"></i>&nbsp;{{ post.created_at|date:"bj,Y,g:i A" }}
+                {% if post.post_content|length > 200 %}
+                <div class="m-2">
+                    <p>{{ post.post_content|truncatechars:200 }} <a href="{% url 'post_detail' post.id %}">see more</a></p>
+                </div>
+                {% else %}
+                <div class="m-2">
+                    <p>{{ post.post_content }} </p>
+                </div>
+                {% endif %}
+                
+                {% if post.post_image %}
+                <div>
+                    <a href="{% url 'post_detail' post.id %}"><img src="{{ post.post_image.url }}"
+                            class="img-fluid post-img" alt="Post Image"></a>
+                </div>
+                {% endif %}
 
+                <div class="post-actions">
+                    <button><i class="fas fa-thumbs-up"></i> Like</button>
+                    <button onclick="toggleCommentBox(this)"><i class="fas fa-comment"></i> Comment</button>
+                    <button><i class="fas fa-share"></i> Share</button>
+                </div>
+
+                <!-- Comment Box -->
+                <div class="comment-box">
+                    <form>
+                        <textarea placeholder="Write a comment..." rows="4"></textarea>
+                        <button type="submit" class="btn-post-comment">Post Comment</button>
+                    </form>
+                </div>
             </div>
-        </div>
-        <div class="m-2" >
-            <p>{{ post.post_content }}</p>
+            {% endfor %}
+
         </div>
 
-        {% if post.post_image %}
+        <div class="col-md-3">
             <div>
-                <img src="{{ post.post_image.url }}" class="img-fluid post-img" alt="Post Image">
+                <ol class="list-group list-group-numbered">
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">Subheading</div>
+                            Content for list item
+                        </div>
+                        <span class="badge text-bg-primary rounded-pill">14</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">Subheading</div>
+                            Content for list item
+                        </div>
+                        <span class="badge text-bg-primary rounded-pill">14</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">Subheading</div>
+                            Content for list item
+                        </div>
+                        <span class="badge text-bg-primary rounded-pill">14</span>
+                    </li>
+                </ol>
             </div>
-        {% endif %}
-
-        <div class="post-actions">
-            <button><i class="fas fa-thumbs-up"></i> Like</button>
-            <button onclick="toggleCommentBox(this)"><i class="fas fa-comment"></i> Comment</button>
-            <button><i class="fas fa-share"></i> Share</button>
         </div>
 
-        <!-- Comment Box -->
-        <div class="comment-box">
-            <form>
-                <textarea placeholder="Write a comment..." rows="4"></textarea>
-                <button type="submit" class="btn-post-comment">Post Comment</button>
-            </form>
-        </div>
-    </div>
-{% endfor %}
-
-</div>
-
-<div class="col-md-3">
-    <div>
-        <ol class="list-group list-group-numbered">
-            <li class="list-group-item d-flex justify-content-between align-items-start">
-                <div class="ms-2 me-auto">
-                    <div class="fw-bold">Subheading</div>
-                    Content for list item
-                </div>
-                <span class="badge text-bg-primary rounded-pill">14</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between align-items-start">
-                <div class="ms-2 me-auto">
-                    <div class="fw-bold">Subheading</div>
-                    Content for list item
-                </div>
-                <span class="badge text-bg-primary rounded-pill">14</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between align-items-start">
-                <div class="ms-2 me-auto">
-                    <div class="fw-bold">Subheading</div>
-                    Content for list item
-                </div>
-                <span class="badge text-bg-primary rounded-pill">14</span>
-            </li>
-        </ol>
     </div>
 </div>
 {% endblock content %}

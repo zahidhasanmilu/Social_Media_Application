@@ -33,7 +33,7 @@ from django.db.models import Q
 # Create your views here.
 def home(request):
     
-    posts = Post.all_posts()
+    posts = Post.all_posts().order_by('-created_at')
     form  =PostForm()
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
@@ -49,3 +49,11 @@ def home(request):
         'posts':posts,
         }
     return render(request, 'app_post/home.html', context)
+
+
+def post_detail(request, id):
+    post = get_object_or_404(Post, id=id)
+    context = {
+        'post': post,
+    }
+    return render(request, 'app_post/post_detail.html', context)
