@@ -29,7 +29,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'user_logout' %}">Logout</a>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">USER</a>
+                        <a class="nav-link" href="#">{{request.user.username|capfirst}}</a>
                     </li>
                     </li>
                     {% else %}

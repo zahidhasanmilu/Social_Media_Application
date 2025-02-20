@@ -1,10 +1,10 @@
-from django.shortcuts import render, HttpResponseRedirect,get_object_or_404, redirect
+from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 
 # VIEW
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, View, TemplateView, DeleteView
 
-#Authentication
+# Authentication
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout, authenticate
@@ -14,27 +14,29 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 
 
-#forms
+# forms
 from .forms import PostForm
 from django.contrib.auth.forms import AuthenticationForm
 
-#models
+# models
 from django.contrib.auth.models import User
-from app_post.models import Post
+from app_post.models import Post, UserProfile
 
-#message
+# message
 from django.contrib import messages
 
 import uuid
 from django.db.models import Q
 
-#----------------------------------------------------------------
+# ----------------------------------------------------------------
 
 # Create your views here.
+
+
 def home(request):
-    
+
     posts = Post.all_posts().order_by('-created_at')
-    form  =PostForm()
+    form = PostForm()
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
@@ -43,11 +45,11 @@ def home(request):
             obj.save()
             print("Form is valid")
             messages.success(request, 'Post created successfully')
-            return redirect('home')  
+            return redirect('home')
     context = {
         'form': form,
-        'posts':posts,
-        }
+        'posts': posts,
+    }
     return render(request, 'app_post/home.html', context)
 
 
@@ -59,19 +61,19 @@ def post_detail(request, id):
     return render(request, 'app_post/post_detail.html', context)
 
 
-
 def post_update(request, id):
     post = get_object_or_404(Post, id=id)
 
     if post.user != request.user:
-        messages.error(request, "You do not have permission to edit this post.")
+        messages.error(
+            request, "You do not have permission to edit this post.")
         return redirect('home')
 
     form = PostForm(instance=post)
 
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES, instance=post)
-        
+
         # যদি Remove Image checkbox টিক করা হয়, তাহলে ইমেজ মুছে দিন
         if 'remove_image' in request.POST:
             post.post_image.delete()
@@ -85,3 +87,20 @@ def post_update(request, id):
 
     context = {'form': form, 'post': post}
     return render(request, 'app_post/post_update.html', context)
+
+
+# @login_required
+# def user_profile(request):
+#     posts = Post.objects.filter(user=request.user).order_by('-created_at')
+#     userprofile = get_object_or_404(UserProfile, user=request.user)
+#     return render(request, 'app_user/profile.html', {
+#         'user': request.user,
+#         'userprofile': userprofile,
+#         'posts': posts,
+#     })
+    
+def user_profile(request,username):
+    user = get_object_or_404(User, username=username)
+    
+    context = {'user':user}
+    return render(request, 'app_user/profile.html',)

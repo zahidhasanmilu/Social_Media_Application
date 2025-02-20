@@ -1,10 +1,17 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.dispatch import receiver
+from django.utils.translation import gettext_lazy as _
+from django.urls import reverse
 from datetime import date
 from PIL import Image
 import os
-from django.urls import reverse
-from django.utils.translation import gettext_lazy as _
+
+# To automatically create one to one objects
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+
 
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -69,7 +76,18 @@ class UserProfile(models.Model):
         # Resize the profile picture before saving
         if self.profile_picture:
             img = Image.open(self.profile_picture)
-            img = img.resize((540, 540), Image.ANTIALIAS)  # Resize image to 540x540
+            img = img.resize((540, 540), Image.Resampling.LANCZOS)   # Resize image to 540x540
             img.save(self.profile_picture.path)  # Save the resized image
 
         super().save(*args, **kwargs)  # Call the original save method
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:  # This ensures it only runs when a new User is created
+        UserProfile.objects.create(user=instance)
+
+# Signal to save UserProfile when the User instance is saved
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.userprofile.save()  #
