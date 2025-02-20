@@ -57,3 +57,31 @@ def post_detail(request, id):
         'post': post,
     }
     return render(request, 'app_post/post_detail.html', context)
+
+
+
+def post_update(request, id):
+    post = get_object_or_404(Post, id=id)
+
+    if post.user != request.user:
+        messages.error(request, "You do not have permission to edit this post.")
+        return redirect('home')
+
+    form = PostForm(instance=post)
+
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES, instance=post)
+        
+        # যদি Remove Image checkbox টিক করা হয়, তাহলে ইমেজ মুছে দিন
+        if 'remove_image' in request.POST:
+            post.post_image.delete()
+            post.post_image = None
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Post updated successfully')
+            return redirect('post_detail', id=post.id)
+            # return redirect('home')
+
+    context = {'form': form, 'post': post}
+    return render(request, 'app_post/post_update.html', context)

@@ -1,4 +1,4 @@
-'''
+
 import re
 from django.shortcuts import get_object_or_404, redirect, render, HttpResponse
 from django.urls import reverse
@@ -19,14 +19,19 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 @logout_required
 def user_signup(request):
     if request.method == 'POST':
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        confirm_password = request.POST.get('confirm_password')
+        name = request.POST.get('username').strip()
+        firstname = request.POST.get('first_name').strip()
+        lastname = request.POST.get('last_name').strip() 
+        email = request.POST.get('email').strip()
+        password = request.POST.get('password').strip()
+        confirm_password = request.POST.get('confirm_password').strip()
+
 
         name = name.lower()
         email = email.lower()
-
+        firstname = firstname.capitalize()
+        lastname = lastname.capitalize()
+        
         # Validate username
         if len(name) < 3 or len(name) > 15:
             messages.info(
@@ -64,7 +69,7 @@ def user_signup(request):
                 return redirect('user_signup')
             else:
                 obj = User.objects.create_user(
-                    username=name, email=email, password=password)
+                    first_name = firstname, last_name=lastname ,username=name, email=email, password=password)
                 obj.set_password(password)
                 obj.save()
                 messages.success(request, 'User Create Succefully')
@@ -72,14 +77,14 @@ def user_signup(request):
         else:
             messages.info(request, "password doesn't match")
             return redirect('user_signup')
-    return render(request, 'user_auth/signup.html')
+    return render(request, 'app_user/signup.html')
 
 
 @logout_required
 def user_login(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        username = request.POST.get('username').strip()
+        password = request.POST.get('password').strip()
 
         username = username.lower()
         password = password.lower()
@@ -87,7 +92,7 @@ def user_login(request):
         # Check if the username exists in the database
         if not User.objects.filter(username=username).exists():
             messages.warning(
-                request, f'"{username}" - Username does not exist.')
+                request, f'"{username}" - Username does not exist. make unique')
             return redirect('user_login')
 
         # Authenticate the user with the provided credentials
@@ -95,11 +100,11 @@ def user_login(request):
         if user is not None:
             login(request, user)
             messages.success(request, f'{username} - Logged in successfully')
-            return redirect('index')
+            return redirect('home')
         else:
             messages.warning(request, f'{username} Invalid credentials.')
             return redirect('user_login')
-    return render(request, 'user_auth/login.html')
+    return render(request, 'app_user/login.html')
 
 
 @login_required
@@ -108,7 +113,7 @@ def user_logout(request):
     # messages.success(request, 'Logged out successfully')
     return redirect('user_login')
 
-
+'''
 @login_required
 def change_password(request):
     if not request.user.is_authenticated:

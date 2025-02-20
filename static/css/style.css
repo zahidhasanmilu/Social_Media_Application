@@ -269,6 +269,8 @@ body {
     background: #007bff;
 }
 
+
+
 /* Mobile responsiveness */
 @media (max-width: 767px) {
     .post-actions {
@@ -287,4 +289,48 @@ body {
         font-size: 16px;
         /* Smaller icon size for mobile */
     }
+}
+
+/* ---------------  */
+/* Three dots menu */
+.post-menu {
+    position: relative;
+    margin-left: auto;
+    cursor: pointer;
+}
+
+.post-menu i {
+    font-size: 18px;
+    color: #333;
+    padding: 5px;
+}
+
+.post-menu:hover i {
+    color: #A50044;
+}
+
+/* Dropdown menu styling */
+.post-dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 25px;
+    background: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: 120px;
+    z-index: 1000;
+}
+
+.post-dropdown a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+}
+
+.post-dropdown a:hover {
+    background: #f1f1f1;
+    border-radius: 8px;
 }

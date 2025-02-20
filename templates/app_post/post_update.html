@@ -1,0 +1,72 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Profile Section -->
+    <div class="row">
+        <div class="col-md-3">
+            <div class="profile-card">
+                <img src="{% static 'img/profile_demo_image.jpeg' %}" alt="Profile Picture">
+                <h3>John Doe</h3>
+                <p>Web Developer | Tech Enthusiast</p>
+                <button class="btn-follow">Follow</button>
+            </div>
+        </div>
+
+        <!-- Post Update Form -->
+        <div class="col-md-6">
+            <div class="post-form">
+                <h5>Update Your Post: {{ post.post_content|truncatechars:15 }}</h5>
+                
+                <form id="postForm" action="{% url 'post_update' post.id %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                
+                    <!-- Validation Errors -->
+                    {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <ul>
+                            {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                            <li>{{ field|title }}: {{ error }}</li>
+                            {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                
+                    <!-- Post Content -->
+                    <div class="mb-3">
+                        {{ form.post_content }}
+                    </div>
+                
+                    <!-- Show Current Image -->
+                    <div class="mb-3">
+                        <label>Current Image:</label><br>
+                        {% if post.post_image %}
+                        <img src="{{ post.post_image.url }}" alt="Post Image" class="img-thumbnail" width="150">
+                        <!-- Remove Image Checkbox -->
+                        <div>
+                            <input type="checkbox" name="remove_image" id="removeImage">
+                            <label for="removeImage">Remove Image</label>
+                        </div>
+                        {% else %}
+                        <p>No image uploaded</p>
+                        {% endif %}
+                    </div>
+                
+                    <!-- Upload New Image -->
+                    <div class="mb-3">
+                        <label for="postImage">Upload New Image:</label>
+                        <input type="file" class="form-control" name="post_image" id="postImage" accept="image/*">
+                    </div>
+                
+                    <button type="submit" class="btn btn-primary">Update Post</button>
+                </form>
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
