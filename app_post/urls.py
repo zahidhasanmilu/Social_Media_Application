@@ -8,5 +8,6 @@ urlpatterns = [
     path('status-update/<int:id>/', views.post_update, name='post_update'),
     # path('profile/', views.user_profile, name='user_profile'),    
     path('profile/<str:username>/', views.user_profile, name='user_profile'),    
+    path('delete/<int:id>/', views.post_delete, name='post_delete'),    
     
 ]

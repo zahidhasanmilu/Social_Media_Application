@@ -56,8 +56,11 @@ class UserProfile(models.Model):
 
 
     def age(self):
-        today = date.today()
-        return today.year - self.dob.year - ((today.month, today.day) < (self.dob.month, self.dob.day))
+        if self.dob:
+            today = date.today()
+            return today.year - self.dob.year - ((today.month, today.day) < (self.dob.month, self.dob.day))
+        return "Not Provided"  # Return a string instead of None
+
 
     def get_full_name(self):
         return f"{self.user.first_name} {self.user.last_name}"

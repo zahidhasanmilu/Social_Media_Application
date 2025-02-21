@@ -83,8 +83,8 @@ def user_signup(request):
 @logout_required
 def user_login(request):
     if request.method == 'POST':
-        username = request.POST.get('username').strip()
-        password = request.POST.get('password').strip()
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
         username = username.lower()
         password = password.lower()

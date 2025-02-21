@@ -32,7 +32,7 @@ from django.db.models import Q
 
 # Create your views here.
 
-
+@login_required
 def home(request):
 
     posts = Post.all_posts().order_by('-created_at')
@@ -52,7 +52,7 @@ def home(request):
     }
     return render(request, 'app_post/home.html', context)
 
-
+@login_required
 def post_detail(request, id):
     post = get_object_or_404(Post, id=id)
     context = {
@@ -60,7 +60,7 @@ def post_detail(request, id):
     }
     return render(request, 'app_post/post_detail.html', context)
 
-
+@login_required
 def post_update(request, id):
     post = get_object_or_404(Post, id=id)
 
@@ -89,6 +89,19 @@ def post_update(request, id):
     return render(request, 'app_post/post_update.html', context)
 
 
+def post_delete(request, id):
+    post = get_object_or_404(Post, id=id)
+    if post.user != request.user:
+        messages.error(
+            request, "You do not have permission to delete this post.")
+        return redirect('home')
+    post.delete()
+    messages.success(request, 'Post deleted successfully')
+    return redirect('/')
+
+# ----------------------------------------------------------------
+
+
 # @login_required
 # def user_profile(request):
 #     posts = Post.objects.filter(user=request.user).order_by('-created_at')
@@ -101,6 +114,12 @@ def post_update(request, id):
     
 def user_profile(request,username):
     user = get_object_or_404(User, username=username)
-    
-    context = {'user':user}
-    return render(request, 'app_user/profile.html',)
+    posts = Post.objects.filter(user=user).order_by('-created_at')
+    userprofile = get_object_or_404(UserProfile, user=user) 
+    context = {
+        'user': user,
+        'userprofile': userprofile,
+        'posts': posts,
+    }
+
+    return render(request, 'app_user/profile.html',context)

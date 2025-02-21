@@ -1,112 +1,132 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'layout.html' %}
+{% load static %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
-    <!-- Bootstrap 5.3 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Custom styling for the profile page */
-body {
-    background-color: #f8f9fa;
-}
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <!-- Profile Section (Left Column) -->
+        <div class="col-md-4">
+            <div class="card mb-4">
+                {% if user.profile_picture %}
+                <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="card-img-top rounded-circle"
+                    style="height: 250px; object-fit: cover;">
 
-.card {
-    margin-bottom: 20px;
-    border-radius: 15px;
-}
-
-.card-img-top {
-    border-radius: 50%;
-    max-height: 250px;
-    object-fit: cover;
-}
-
-.list-group-item {
-    border: 1px solid #ddd;
-    border-radius: 10px;
-}
-
-.list-group-item img {
-    max-height: 400px;
-    object-fit: cover;
-    border-radius: 10px;
-}
-
-.list-group-item p {
-    font-size: 14px;
-    color: #555;
-}
-
-.card-body {
-    padding: 20px;
-}
-
-h5 {
-    font-size: 18px;
-    font-weight: bold;
-}
-
-    </style>
-</head>
-
-<body>
-    <div class="container mt-5">
-        <div class="row">
-            <!-- Profile Section (Left Column) -->
-            <div class="col-md-4">
-                <div class="card mb-4">
-                    {% if user.profile_picture %}
-                    <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="card-img-top rounded-circle" style="height: 250px; object-fit: cover;">
-                    
-                    {% endif %}
-                    <!-- Profile Picture -->
-                    <div class="card-body">
-                        <h5 class="card-title">{{ user.get_full_name }}</h5>
-                        <p class="card-text"><strong>Email:</strong> {{ user.email }}</p>
-                        <p class="card-text"><strong>Address:</strong> {{ userprofile.address }}</p>
-                        <p class="card-text"><strong>Bio:</strong> {{ userprofile.bio }}</p>
-                        <p class="card-text"><strong>Works at:</strong> {{ userprofile.works_at }}</p>
-                        <p class="card-text"><strong>Lives in:</strong> {{ userprofile.lives_in }}</p>
-                        <p class="card-text"><strong>Marital Status:</strong> {{ userprofile.marital_status }}</p>
-                        <p class="card-text"><strong>Age:</strong> {{ userprofile.age }}</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Post Section (Right Column) -->
-            <div class="col-md-8">
-                <h3>Recent Posts</h3>
-                <div class="list-group">
-                    {% for post in posts %}
-                    <div class="list-group-item mb-3">
-                        <!-- Post User Info -->
-                        <h5 class="mb-2">{{ post.user.get_full_name }}</h5>
-                        <!-- Post Content -->
-                        <p>{{ post.post_content }}</p>
-                        {% if post.post_image %}
-                        <img src="{{ post.post_image.url }}" alt="Post Image" class="img-fluid mb-3" style="max-height: 400px; object-fit: cover;">
-                        {% endif %}
-                        <!-- Post Timestamp -->
-                        <p class="text-muted">{{ post.created_at|date:"M d, Y H:i" }}</p>
-                    </div>
-                    {% endfor %}
+                {% endif %}
+                <!-- Profile Picture -->
+                <div class="card-body">
+                    <h5 class="card-title">{{ user.get_full_name }}</h5>
+                    <p class="card-text"><strong>Email:</strong> {{ user.email }}</p>
+                    <p class="card-text"><strong>Address:</strong> {{ userprofile.address }}</p>
+                    <p class="card-text"><strong>Bio:</strong> {{ userprofile.bio }}</p>
+                    <p class="card-text"><strong>Works at:</strong> {{ userprofile.works_at }}</p>
+                    <p class="card-text"><strong>Lives in:</strong> {{ userprofile.lives_in }}</p>
+                    <p class="card-text"><strong>Marital Status:</strong> {{ userprofile.marital_status }}</p>
+                    <p class="card-text"><strong>Age:</strong> {{ userprofile.age }}</p>
                 </div>
             </div>
         </div>
+
+        <!-- Post Section (Right Column) -->
+        <div class="col-md-6">
+            <!-- Post Form -->{% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+            <div class="post-form">
+                <h3>Create Your Post</h3>
+                <form id="postForm" action="{% url 'home' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <!-- ফর্মের ভ্যালিডেশন ইরর দেখানোর জন্য -->
+                    {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <ul>
+                            {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                            <li>{{ field|title }}: {{ error }}</li>
+                            {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <textarea class="form-control" name="post_content" id="postText"
+                            placeholder="What's on your mind?.." rows="5"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <input type="file" class="form-control" name="post_image" id="postImage" accept="image/*">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Post</button>
+                </form>
+            </div>
+
+            <!-- Post Cards will appear here -->
+            {% for post in posts %}
+            <div class="post-card">
+
+                <div class="post-header">
+                    <!-- Profile Image -->
+                    <img src="{% static 'img/profile_demo_image.jpeg' %}" class="profile-image" alt="Profile Image">
+
+                    <!-- User Name and Time -->
+                    <div class="user-time">
+                        <a style="text-decoration: none;" href="{% url 'user_profile' user.username %}"><h6 class="post-user"><b>{{ post.user.first_name }}&nbsp;{{ post.user.last_name }}</b></h6></a>
+                        <i class="fa-solid fa-clock"></i>&nbsp;{{ post.created_at|date:"M j, Y, g:i A" }}
+                    </div>
+
+                    
+                    <!-- Three Dots Menu -->
+                    {% if post.user == request.user %}
+                    <div class="post-menu" onclick="toggleDropdown(this)">
+                        <i class="fas fa-ellipsis-h"></i> <!-- Three dots icon -->
+                        <div class="post-dropdown">
+                            <a href="{% url 'post_update' post.id %}">Edit</a>
+                            <a href="{% url 'post_delete' post.id %}"
+                                onclick="return confirm('Are you sure you want to delete this post?');">Delete</a>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                {% if post.post_content|length > 200 %}
+                <div class="m-2">
+                    <p>{{ post.post_content|truncatechars:200 }} <a href="{% url 'post_detail' post.id %}">see more</a>
+                    </p>
+                </div>
+                {% else %}
+                <div class="m-2">
+                    <p>{{ post.post_content }} </p>
+                </div>
+                {% endif %}
+
+                {% if post.post_image %}
+                <div>
+                    <a href="{% url 'post_detail' post.id %}"><img src="{{ post.post_image.url }}"
+                            class="img-fluid post-img" alt="Post Image"></a>
+                </div>
+                {% endif %}
+
+                <div class="post-actions">
+                    <button><i class="fas fa-thumbs-up"></i> Like</button>
+                    <button onclick="toggleCommentBox(this)"><i class="fas fa-comment"></i> Comment</button>
+                    <button><i class="fas fa-share"></i> Share</button>
+                </div>
+
+                <!-- Comment Box -->
+                <div class="comment-box">
+                    <form>
+                        <textarea placeholder="Write a comment..." rows="4"></textarea>
+                        <button type="submit" class="btn-post-comment">Post Comment</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
     </div>
+</div>
 
-    <!-- Bootstrap 5.3 JS, Popper, and jQuery -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="script.js"></script>
-    <script>// Example script for potential future functionality (AJAX request for new posts)
-        document.addEventListener('DOMContentLoaded', () => {
-            // You can add functionality for AJAX or other interactive features here
-        });
-        </script>
-</body>
-
-</html>
+{% endblock content %}
