@@ -53,6 +53,7 @@ Update Post
 delete post
 User Profile
 Update User Profile
+User Authentication
 
 
 ## Technologies Used
