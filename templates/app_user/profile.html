@@ -7,9 +7,10 @@
         <!-- Profile Section (Left Column) -->
         <div class="col-md-4">
             <div class="card mb-4">
-                {% if user.profile_picture %}
-                <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="card-img-top rounded-circle"
-                    style="height: 250px; object-fit: cover;">
+                {% if userprofile.profile_picture %}
+                <img src="{{ userprofile.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle"
+                    style="width: 150px; height: 150px; object-fit: cover;">
+
 
                 {% endif %}
                 <!-- Profile Picture -->
@@ -21,8 +22,13 @@
                     <p class="card-text"><strong>Works at:</strong> {{ userprofile.works_at }}</p>
                     <p class="card-text"><strong>Lives in:</strong> {{ userprofile.lives_in }}</p>
                     <p class="card-text"><strong>Marital Status:</strong> {{ userprofile.marital_status }}</p>
-                    <p class="card-text"><strong>Age:</strong> {{ userprofile.age }}</p>
+                    <p class="card-text"><strong>Age:</strong> {{ userprofile.age }} Year's</p>
+                    <p class="card-text"><strong>Your updated status:</strong> {{ posts.count }}</p>
                 </div>
+                {% if userprofile.user == request.user %}               
+                
+                <a href="{% url 'update_profile' %}" class="btn btn-primary">Update your profile</a>
+                {% endif %}
             </div>
         </div>
 
@@ -34,6 +40,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             {% endfor %}
+            {% if userprofile.user == request.user %}
             <div class="post-form">
                 <h3>Create Your Post</h3>
                 <form id="postForm" action="{% url 'home' %}" method="POST" enctype="multipart/form-data">
@@ -62,6 +69,7 @@
                     <button type="submit" class="btn btn-primary">Post</button>
                 </form>
             </div>
+            {% endif %}
 
             <!-- Post Cards will appear here -->
             {% for post in posts %}
@@ -73,11 +81,13 @@
 
                     <!-- User Name and Time -->
                     <div class="user-time">
-                        <a style="text-decoration: none;" href="{% url 'user_profile' user.username %}"><h6 class="post-user"><b>{{ post.user.first_name }}&nbsp;{{ post.user.last_name }}</b></h6></a>
+                        <a style="text-decoration: none;" href="{% url 'user_profile' post.user.username %}">
+                            <h6 class="post-user"><b>{{ post.user.first_name }}&nbsp;{{ post.user.last_name }}</b></h6>
+                        </a>
                         <i class="fa-solid fa-clock"></i>&nbsp;{{ post.created_at|date:"M j, Y, g:i A" }}
                     </div>
 
-                    
+
                     <!-- Three Dots Menu -->
                     {% if post.user == request.user %}
                     <div class="post-menu" onclick="toggleDropdown(this)">

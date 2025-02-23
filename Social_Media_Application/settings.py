@@ -45,8 +45,15 @@ INSTALLED_APPS = [
 CUSTOME_APPS = [
     'app_user',
     'app_post',
+    
+    'crispy_forms',
+'crispy_bootstrap5',
     ]
 INSTALLED_APPS += CUSTOME_APPS
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
 
 # AUTH_USER_MODEL = 'app_user.User'
     
@@ -139,3 +146,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# settings.py
+LOGIN_URL = '/login/'  

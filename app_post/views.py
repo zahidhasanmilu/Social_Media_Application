@@ -15,7 +15,7 @@ from django.views.decorators.cache import never_cache
 
 
 # forms
-from .forms import PostForm
+from .forms import PostForm, UserProfileForm
 from django.contrib.auth.forms import AuthenticationForm
 
 # models
@@ -34,6 +34,7 @@ from django.db.models import Q
 
 @login_required
 def home(request):
+    userprofile = get_object_or_404(UserProfile, user=request.user)
 
     posts = Post.all_posts().order_by('-created_at')
     form = PostForm()
@@ -49,6 +50,7 @@ def home(request):
     context = {
         'form': form,
         'posts': posts,
+        'userprofile': userprofile,
     }
     return render(request, 'app_post/home.html', context)
 
@@ -89,6 +91,7 @@ def post_update(request, id):
     return render(request, 'app_post/post_update.html', context)
 
 
+@login_required
 def post_delete(request, id):
     post = get_object_or_404(Post, id=id)
     if post.user != request.user:
@@ -112,8 +115,10 @@ def post_delete(request, id):
 #         'posts': posts,
 #     })
     
+@login_required
 def user_profile(request,username):
     user = get_object_or_404(User, username=username)
+    
     posts = Post.objects.filter(user=user).order_by('-created_at')
     userprofile = get_object_or_404(UserProfile, user=user) 
     context = {
@@ -123,3 +128,25 @@ def user_profile(request,username):
     }
 
     return render(request, 'app_user/profile.html',context)
+
+# ----------------------------------------------------------------
+@login_required
+def update_profile(request):
+    userprofile = get_object_or_404(UserProfile, user=request.user)
+    
+    if userprofile.user != request.user:
+        messages.error(request, "You do not have permission to edit this profile.")
+        return redirect('user_profile', username=request.user.username)
+
+    if request.method == 'POST':
+        userprofile_form = UserProfileForm(request.POST, request.FILES, instance=userprofile, user=request.user)
+        if userprofile_form.is_valid():
+            userprofile_form.save()
+            messages.success(request, 'Profile updated successfully')
+            return redirect('user_profile', username=request.user.username) # Ensure 'user_profile' is a valid URL name
+    else:
+        userprofile_form = UserProfileForm(instance=userprofile, user=request.user)
+
+    return render(request, 'app_user/update_profile.html', {
+        'form': userprofile_form,  # Changed 'forms' to 'form' for consistency
+    })
