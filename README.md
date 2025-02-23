@@ -8,7 +8,7 @@ Follow the steps below to set up and run the project on your local machine.
 
 ### Clone the Repository
 ```bash
-git clone https://github.com/zahidhasanmilu/Student-Management-System---Ostad-Project.git
+https://github.com/zahidhasanmilu/Social_Media_Application.git
 ```
 
 ### Create and Activate Virtual Environment
@@ -46,6 +46,13 @@ Use the superuser credentials to log in.
 ```
 
 ## Features
+Register a new user
+Login user
+Create Post
+Update Post
+delete post
+User Profile
+Update User Profile
 
 
 ## Technologies Used
