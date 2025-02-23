@@ -8,7 +8,7 @@ Follow the steps below to set up and run the project on your local machine.
 
 ### Clone the Repository
 ```bash
-https://github.com/zahidhasanmilu/Social_Media_Application.git
+git clone https://github.com/zahidhasanmilu/Social_Media_Application.git
 ```
 
 ### Create and Activate Virtual Environment
